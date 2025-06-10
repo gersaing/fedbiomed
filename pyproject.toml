@@ -151,7 +151,7 @@ exclude = [
 [tool.hatch.build.hooks.custom]
 
 [tool.hatch.build.targets.wheel]
-packages = ["fedbiomed", "fedbiomed_gui"]
+packages = ["fedbiomed","fedbiomed.modulo_dicom", "fedbiomed_gui"]
 artifacts = [
   "fedbiomed_gui/ui/build"
 ]

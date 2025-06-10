@@ -165,13 +165,13 @@ researcher_p = cli.subparsers.add_parser(
 
 # Integracion con el modulo DICOM
 def process_dicom(args):
-    from fedbiomed.modulo_dicom import fed_dcm_ini
+    from fedbiomed.modulo_dicom import fed_dcm_start
     """
     Función que procesa los archivos DICOM ubicados en el directorio indicado por el argumento '--path'.
     Se asume que existe un módulo 'mi_modulo_dicom' con la función 'process_dicom_directory'.
     """
     try:
-        fed_dcm_ini.main(args.dcm_path, args.num_dicoms)
+        fed_dcm_start.main(args.dcm_path, args.num_dicoms)
     except ImportError:
         print("No se pudo encontrar el módulo de procesamiento DICOM")
         return
