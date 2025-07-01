@@ -1,0 +1,85 @@
+SpecificCharacterSet: ISO_IR 100
+ImageType: ['DERIVED', 'PRIMARY']
+InstanceCreationDate: 20170818
+InstanceCreationTime: 114657
+InstanceCreatorUID: 1.3.6.1.4.1.14519.5.2.1.1239.1759.256693145395574474618647257749
+SOPClassUID: 1.2.840.10008.5.1.4.1.1.1.2
+SOPInstanceUID: 1.3.6.1.4.1.14519.5.2.1.1239.1759.263097932336036809533695398598
+StudyDate: 20100718
+SeriesDate: 20100718
+AcquisitionDate: 20100718
+ContentDate: 20100718
+StudyTime: 000000
+SeriesTime: 000000
+AcquisitionTime: 000000
+ContentTime: 000000
+AccessionNumber: 
+Modality: MG
+PresentationIntentType: FOR PRESENTATION
+Manufacturer: 
+ReferringPhysicianName: 
+AnatomicRegionSequence: [(0008,0100) Code Value                          SH: '76752008'
+(0008,0102) Coding Scheme Designator            SH: 'SCT'
+(0008,0104) Code Meaning                        LO: 'Breast']
+PatientName: D1-0018
+PatientID: D1-0018
+PatientBirthDate: 
+PatientSex: F
+PatientAge: 046Y
+PatientIdentityRemoved: YES
+DeidentificationMethod: Per DICOM PS 3.15 AnnexE. Details in 0012,0064
+DeidentificationMethodCodeSequence: [(0008,0100) Code Value                          SH: '113100'
+(0008,0102) Coding Scheme Designator            SH: 'DCM'
+(0008,0104) Code Meaning                        LO: 'Basic Application Confidentiality Profile'(0008,0100) Code Value                          SH: '113101'
+(0008,0102) Coding Scheme Designator            SH: 'DCM'
+(0008,0104) Code Meaning                        LO: 'Clean Pixel Data Option'(0008,0100) Code Value                          SH: '113104'
+(0008,0102) Coding Scheme Designator            SH: 'DCM'
+(0008,0104) Code Meaning                        LO: 'Clean Structured Content Option'(0008,0100) Code Value                          SH: '113105'
+(0008,0102) Coding Scheme Designator            SH: 'DCM'
+(0008,0104) Code Meaning                        LO: 'Clean Descriptors Option'(0008,0100) Code Value                          SH: '113107'
+(0008,0102) Coding Scheme Designator            SH: 'DCM'
+(0008,0104) Code Meaning                        LO: 'Retain Longitudinal Temporal Information Modified Dates Option'(0008,0100) Code Value                          SH: '113108'
+(0008,0102) Coding Scheme Designator            SH: 'DCM'
+(0008,0104) Code Meaning                        LO: 'Retain Patient Characteristics Option'(0008,0100) Code Value                          SH: '113109'
+(0008,0102) Coding Scheme Designator            SH: 'DCM'
+(0008,0104) Code Meaning                        LO: 'Retain Device Identity Option'(0008,0100) Code Value                          SH: '113111'
+(0008,0102) Coding Scheme Designator            SH: 'DCM'
+(0008,0104) Code Meaning                        LO: 'Retain Safe Private Option']
+BodyPartExamined: BREAST
+ImagerPixelSpacing: [0.094090909, 0.094090909]
+PositionerType: MAMMOGRAPHIC
+DetectorType: SCINTILLATOR
+StudyInstanceUID: 1.3.6.1.4.1.14519.5.2.1.1239.1759.707227746684935621076228831042
+SeriesInstanceUID: 1.3.6.1.4.1.14519.5.2.1.1239.1759.277713764308452169563565361573
+StudyID: 
+SeriesNumber: 1
+InstanceNumber: 1
+PatientOrientation: ['P', 'L']
+ImageLaterality: R
+SamplesPerPixel: 1
+PhotometricInterpretation: MONOCHROME2
+Rows: 2294
+Columns: 1914
+BitsAllocated: 8
+BitsStored: 8
+HighBit: 7
+PixelRepresentation: 0
+BurnedInAnnotation: NO
+LongitudinalTemporalInformationModified: MODIFIED
+PixelIntensityRelationship: LOG
+PixelIntensityRelationshipSign: -1
+WindowCenter: 128
+WindowWidth: 256
+RescaleIntercept: 0
+RescaleSlope: 1
+RescaleType: US
+WindowCenterWidthExplanation: Full width of 8 bit data
+VOILUTFunction: SIGMOID
+LossyImageCompression: 00
+OrganExposed: BREAST
+AcquisitionContextSequence: []
+ViewCodeSequence: [(0008,0100) Code Value                          SH: '399162004'
+(0008,0102) Coding Scheme Designator            SH: 'SCT'
+(0008,0104) Code Meaning                        LO: 'cranio-caudal'
+(0054,0222)  View Modifier Code Sequence  0 item(s) ---- ]
+PresentationLUTShape: IDENTITY

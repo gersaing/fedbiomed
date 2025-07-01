@@ -172,11 +172,10 @@ def main(dcm_path, num_dicoms):
     os.makedirs(output_csv_dir, exist_ok=True)
     dicom_directory = dcm_path
     limite = num_dicoms
-
     dicom_files = []
     for subdir, _, files in os.walk(dicom_directory):  # Recorrer subdirectorios
         for file in files:
-            if file.endswith(".dcm"):
+            if file.endswith(".dcm") or file.endswith(".dicom"):
                 dicom_files.append(os.path.abspath(os.path.join(subdir, file)))
 
     # Procesar n archivos que deseemos, para este caso 5 a modo de prueba
