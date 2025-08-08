@@ -165,21 +165,21 @@ researcher_p = cli.subparsers.add_parser(
 
 # Integracion con el modulo DICOM
 def process_dicom(args):
-    from fedbiomed.modulo_dicom import fed_dcm_start
+    from fedbiomed.modulo_dicom import pipeline_completo
     """
     Función que procesa los archivos DICOM ubicados en el directorio indicado por el argumento '--path'.
     Se asume que existe un módulo 'mi_modulo_dicom' con la función 'process_dicom_directory'.
     """
     try:
-        fed_dcm_start.main(args.dcm_path, args.num_dicoms)
+        pipeline_completo.main(args.ruta_dcm, args.num_dcm)
     except ImportError:
         print("No se pudo encontrar el módulo de procesamiento DICOM")
         return
 dicom_p = cli.subparsers.add_parser(
     "dicom", help="Procesa archivos DICOM y genera CSV a partir de ellos."
 )
-dicom_p.add_argument("--dcm_path",type=str,required=True, help="Ruta del dataset")
-dicom_p.add_argument("--num_dicoms",type=int,required=True,help="Número de archivos dicom")
+dicom_p.add_argument("--ruta_dcm",type=str,required=True, help="Ruta del dataset")
+dicom_p.add_argument("--num_dcm",type=int,required=True,help="Número de archivos dicom")
 dicom_p.set_defaults(func=process_dicom)
 # fin integracioncuad
 
