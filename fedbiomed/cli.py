@@ -171,7 +171,7 @@ def process_dicom(args):
     Se asume que existe un módulo 'mi_modulo_dicom' con la función 'process_dicom_directory'.
     """
     try:
-        pipeline_completo.main(args.ruta_dcm, args.num_dcm)
+        pipeline_completo.main(args.ruta_dcm, args.num_dcm, args.nom_nodo)
     except ImportError:
         print("No se pudo encontrar el módulo de procesamiento DICOM")
         return
@@ -180,6 +180,7 @@ dicom_p = cli.subparsers.add_parser(
 )
 dicom_p.add_argument("--ruta_dcm",type=str,required=True, help="Ruta del dataset")
 dicom_p.add_argument("--num_dcm",type=int,required=True,help="Número de archivos dicom")
+dicom_p.add_argument("--nom_nodo",type=str,required=True,help="Ruta del nodo para la salida de los arhivos procesados")
 dicom_p.set_defaults(func=process_dicom)
 # fin integracioncuad
 

@@ -1,6 +1,5 @@
 # ejecutar_pipeline.py
 import pandas as pd
-import argparse
 from .configuracion import obtener_rutas
 from .pipeline_transformacion import PipelineDicom
 from .preprocesamiento import (
@@ -12,6 +11,7 @@ from .preprocesamiento import (
     ajustar_dataset_validacion,
     eliminar_columnas_irrelevantes,
 )
+from .utilidades import obtener_ruta_salida_modulo
 
 
 __intro__ = """
@@ -30,17 +30,17 @@ __intro__ = """
 def intro():
     """Prints intro for the CLI"""
 
-def main(ruta_dicoms: str, limite: int): 
+def main(ruta_dicoms: str, limite: int, nombre_nodo: str): 
     print("\033[91m" + __intro__ +"\033[0m")
-    rutas = obtener_rutas()
+    ruta_nodo = obtener_ruta_salida_modulo(nombre_nodo)
+    rutas = obtener_rutas(ruta_nodo)
     # 2) Procesar los archivos DICOM
     print("[INFO] Iniciando procesamiento de archivos DICOM...")
     pipeline = PipelineDicom(rutas)
     pipeline.procesar_directorio(ruta_dicoms, limite)
-
+    pipeline.extraer_caracteristicas()
+    pipeline.fusionar_caracteristicas_metadatos()
     # 3) Preprocesamiento de datos
-    rutas = obtener_rutas()
-
     df = pd.read_csv(rutas["fusionado"])
     df = eliminar_columnas_irrelevantes(df)
     df = codificar_dataset(df)
@@ -56,11 +56,3 @@ def main(ruta_dicoms: str, limite: int):
         df = ajustar_dataset_validacion(df, rutas["entrenamiento"])
         normalizar_validacion(df, rutas["escalador"], rutas["validacion"])
         print(f"[INFO] Flujo de dataset validación completado. ")
-
-if __name__ == "__main__":
-
-    parser = argparse.ArgumentParser(description="Script de aprendizaje federado")
-    parser.add_argument("--ruta_dcm",type=str,required=True, help="Ruta del directorio con archivos DICOM")
-    parser.add_argument("--num_dcm",type=int,required=True,help="Número de archivos dicom a procesar")
-    args = parser.parse_args()
-    main(args.ruta_dcm,args.num_dcm)

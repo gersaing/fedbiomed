@@ -4,6 +4,7 @@ import joblib
 from sklearn.preprocessing import MinMaxScaler
 
 
+
 def eliminar_columnas_irrelevantes(df):
     """
     Lee el CSV fusionado, elimina columnas irrelevantes.

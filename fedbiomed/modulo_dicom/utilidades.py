@@ -1,5 +1,8 @@
-import os
+import os,shutil
 import csv
+import re
+from fedbiomed.modulo_dicom.excepciones import NodoNoEncontradoError
+
 def obtener_lista_dicoms(ruta_directorio):
     """
     Retorna una lista con las rutas absolutas de todos los archivos DICOM (.dcm o .dicom)
@@ -75,3 +78,64 @@ def fusionar_caracteristicas_metadatos(ruta_carac_csv, carpeta_metadatos, ruta_s
             fila_meta = [metadatos.get(clave, "") for clave in claves_ordenadas]
             writer.writerow(fila_carac + fila_meta)
     print(f"Dataset fusionado guardado en: {ruta_salida_csv}")
+
+def limpiar_directorio(carpeta):
+    if os.path.exists(carpeta):
+        shutil.rmtree(carpeta)
+        print(f"[INFO] Carpeta {carpeta} eliminada.")
+
+def iter_rutas_imagenes(carpeta_imagenes):
+    """
+    Genera rutas .../imagen_<id>.jpg ordenadas por <id>.
+    """
+    prefijo="imagen_"
+    ext=".jpg"
+    entradas = [
+        e for e in os.scandir(carpeta_imagenes)
+        if e.is_file() and e.name.startswith(prefijo) and e.name.lower().endswith(ext)
+    ]
+
+    def clave_orden(e):
+        nombre = e.name
+        # extrae lo que hay entre prefijo y extensión
+        id_str = nombre[len(prefijo):-len(ext)]
+        # intenta numérico
+        m = re.fullmatch(r"\d+", id_str)
+        if m:
+            return (0, int(id_str))        # orden numérico
+        else:
+            return (1, id_str.lower())     # fallback: orden lexicográfico
+
+    entradas.sort(key=clave_orden)
+
+    for e in entradas:
+        yield e.path
+
+def id_desde_ruta(ruta):
+    prefijo="imagen_"
+    ext=".jpg"
+    nombre = os.path.basename(ruta)
+    if nombre.startswith(prefijo) and nombre.lower().endswith(ext):
+        return nombre[len(prefijo):-len(ext)]
+    raise ValueError(f"Nombre no cumple {prefijo}<id>{ext}: {nombre}")
+
+import os
+
+def obtener_ruta_datos_nodo(nombre_nodo: str = "local") -> str:
+    """
+    Devuelve la ruta absoluta a data/<nombre_nodo>
+    dentro del sandbox del nodo.
+    """
+    ruta = os.path.join(os.getcwd(), nombre_nodo)
+    if not os.path.isdir(ruta):
+        raise NodoNoEncontradoError(f"El nodo '{nombre_nodo}' no existe en el directorio actual.")
+    return os.path.join(os.getcwd(), nombre_nodo, "data")
+
+def obtener_ruta_salida_modulo(nombre_nodo: str = "local") -> str:
+    """
+    Devuelve la carpeta donde volcar los resultados:
+    <nombre_nodo>/data/modulo_dicom_results
+    """
+    ruta_datos = obtener_ruta_datos_nodo(nombre_nodo)
+    return os.path.join(ruta_datos, "resultados_modulo_dicom")
+

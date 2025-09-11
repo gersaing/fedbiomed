@@ -1,5 +1,4 @@
 import os
-CARPETA_BASE_SALIDA =  "resultados_modulo_dicom"
 CARPETA_IMAGENES = "imagenes"
 CARPETA_METADATOS = "metadatos"
 ARCHIVO_FUSIONADO = "dataset_fusionado.csv"
@@ -9,8 +8,8 @@ ARCHIVO_ESCALADOR = "escalador.pkl"
 ARCHIVO_VALIDACION = "dataset_cancer_mama_validacion.csv"
 ARCHIVO_CARACTERISTICAS = "caracteristicas.csv"
 
-def obtener_rutas():
-    carpeta_base = CARPETA_BASE_SALIDA
+def obtener_rutas(ruta_nodo):
+    carpeta_base = ruta_nodo
     os.makedirs(carpeta_base, exist_ok=True)
     rutas = {
         "imagenes": os.path.join(carpeta_base, CARPETA_IMAGENES),

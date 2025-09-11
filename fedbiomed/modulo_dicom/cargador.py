@@ -58,7 +58,7 @@ def extraer_imagen_jpg(archivo_dicom, carpeta_salida, indice):
 
         imagen = Image.fromarray(pixel_array).convert('L')
         os.makedirs(carpeta_salida, exist_ok=True)
-        ruta_imagen = os.path.join(carpeta_salida, f"{indice}.jpg")
+        ruta_imagen = os.path.join(carpeta_salida, f"imagen_{indice}.jpg")
         imagen.save(ruta_imagen)
         print(f"Imagen guardada en: {ruta_imagen}")
         return ruta_imagen
