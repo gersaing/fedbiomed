@@ -22,23 +22,27 @@ def eliminar_columnas_irrelevantes(df):
 
 def codificar_dataset(df):
     """Realiza codificaciones específicas en el DataFrame."""
-    mapeo_view_position = {'CC': 0, 'MLO': 1}
-    mapeo_image_laterality = {'L': 0, 'R': 1}
     mapeo_burned_in = {'NO': 0, 'YES': 1}
 
-    # Codificaciones
-    if 'ViewPosition' in df.columns:
-        df['ViewPosition'] = df['ViewPosition'].map(mapeo_view_position)
-    if 'ImageLaterality' in df.columns:
-        df['ImageLaterality'] = df['ImageLaterality'].map(mapeo_image_laterality)
+    # Codificaciones específicas
     if 'BurnedInAnnotation' in df.columns:
         df['BurnedInAnnotation'] = df['BurnedInAnnotation'].map(mapeo_burned_in)
     if 'PatientAge' in df.columns:
         df['PatientAge'] = df['PatientAge'].astype(str).str.extract(r'(\d+)').astype(float)
 
+    #One-hot encoding
+    columnas_one_hot = []
+    if 'ViewPosition' in df.columns:
+        columnas_one_hot.append('ViewPosition')
+    if 'ImageLaterality' in df.columns:
+        columnas_one_hot.append('ImageLaterality')
+    if columnas_one_hot:
+        df = pd.get_dummies(df, columns=columnas_one_hot, prefix=columnas_one_hot)
+
     # Limpieza de orientación con one-hot encoding
     if 'PatientOrientation' in df.columns:
         df['PatientOrientation'] = df['PatientOrientation'].astype(str).str.replace(r"[\[\]',]", '', regex=True).str.strip()
+    # One-hot encoding
 
     return df
 

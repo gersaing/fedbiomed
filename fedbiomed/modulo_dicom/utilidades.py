@@ -70,13 +70,13 @@ def fusionar_caracteristicas_metadatos(ruta_carac_csv, carpeta_metadatos, ruta_s
 
     # Escribe el CSV final
     os.makedirs(os.path.dirname(ruta_salida_csv), exist_ok=True)
-    with open(ruta_salida_csv, mode='w', newline='') as f_out:
-        writer = csv.writer(f_out)
+    with open(ruta_salida_csv, mode='w', newline='') as f_salida:
+        escritor = csv.writer(f_salida)
         encabezado_final = encabezados_caracteristicas + claves_ordenadas
-        writer.writerow(encabezado_final)
+        escritor.writerow(encabezado_final)
         for fila_carac, metadatos in registros_fusionados:
             fila_meta = [metadatos.get(clave, "") for clave in claves_ordenadas]
-            writer.writerow(fila_carac + fila_meta)
+            escritor.writerow(fila_carac + fila_meta)
     print(f"Dataset fusionado guardado en: {ruta_salida_csv}")
 
 def limpiar_directorio(carpeta):

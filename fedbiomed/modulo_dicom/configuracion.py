@@ -7,6 +7,9 @@ ARCHIVO_ENTRENAMIENTO = "dataset_cancer_mama.csv"
 ARCHIVO_ESCALADOR = "escalador.pkl"
 ARCHIVO_VALIDACION = "dataset_cancer_mama_validacion.csv"
 ARCHIVO_CARACTERISTICAS = "caracteristicas.csv"
+ARCHIVO_BALANCEADO_SMOTE = "dataset_cancer_mama_smote.csv"
+ARCHIVO_BALANCEADO_UNDER = "dataset_cancer_mama_under.csv"
+ARCHIVO_BALANCEADO_SMOTE_ENN = "dataset_cancer_mama_smtn.csv"
 
 def obtener_rutas(ruta_nodo):
     carpeta_base = ruta_nodo
@@ -19,6 +22,9 @@ def obtener_rutas(ruta_nodo):
         "nuevos": os.path.join(carpeta_base,  ARCHIVO_NUEVOS),
         "entrenamiento": os.path.join(carpeta_base, ARCHIVO_ENTRENAMIENTO),
         "escalador": os.path.join(carpeta_base, ARCHIVO_ESCALADOR),
-        "validacion": os.path.join(carpeta_base, ARCHIVO_VALIDACION)
+        "validacion": os.path.join(carpeta_base, ARCHIVO_VALIDACION),
+        "bal_smote": os.path.join(carpeta_base, ARCHIVO_BALANCEADO_SMOTE),
+        "bal_under": os.path.join(carpeta_base, ARCHIVO_BALANCEADO_UNDER),
+        "bal_smote_enn": os.path.join(carpeta_base, ARCHIVO_BALANCEADO_SMOTE_ENN)
     }
     return rutas

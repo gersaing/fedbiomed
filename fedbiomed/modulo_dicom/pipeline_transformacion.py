@@ -5,32 +5,42 @@ from .utilidades import guardar_caracteristicas_csv, fusionar_caracteristicas_me
 import os,shutil
 
 class PipelineDicom:
-    def __init__(self, rutas):
+    def __init__(self, rutas,ruta_directorio,limite):
         self.rutas = rutas
         self.carpeta_metadatos = rutas["metadatos"]
         self.carpeta_imagenes = rutas["imagenes"]
+        self.ruta_directorio = ruta_directorio
+        self.limite = limite
         # Solo aquí creas las carpetas necesarias
         for carpeta in [self.carpeta_metadatos, self.carpeta_imagenes]:
             limpiar_directorio(carpeta)  # Limpia antes de crear
         for carpeta in [self.carpeta_metadatos, self.carpeta_imagenes]:
             os.makedirs(carpeta, exist_ok=True)
     
-    def procesar_directorio(self, ruta_directorio, limite):
+    def procesar_directorio(self):
 
-        rutas_dicoms = obtener_lista_dicoms(ruta_directorio)
+        rutas_dicoms = obtener_lista_dicoms(self.ruta_directorio)
         ruta_csv_caracteriticas = self.rutas['caracteristicas']
         if os.path.exists(ruta_csv_caracteriticas):
             os.remove(ruta_csv_caracteriticas)
 
-        for indice, ruta_dicom in enumerate(rutas_dicoms[:limite]):
-            dicom = cargar_dicom(ruta_dicom)
-            metadatos = extraer_metadatos(dicom)
-            ruta_metadatos = guardar_metadatos_txt(metadatos, self.carpeta_metadatos, indice + 1)
-            ruta_imagen = extraer_imagen_jpg(dicom, self.carpeta_imagenes, indice + 1)
-
-            print(f"Procesado archivo {indice+1}:")
-            print(f" - Metadatos en: {ruta_metadatos}")
-            print(f" - Imagen en: {ruta_imagen}")
+        for indice, ruta_dicom in enumerate(rutas_dicoms[:self.limite]):
+            try:
+                dicom = cargar_dicom(ruta_dicom)
+                ruta_imagen = extraer_imagen_jpg(dicom, self.carpeta_imagenes, indice + 1)
+                if ruta_imagen:
+                    metadatos = extraer_metadatos(dicom)
+                    ruta_metadatos = guardar_metadatos_txt(metadatos, self.carpeta_metadatos, indice + 1)
+                    print(f"Procesado archivo {indice+1}:")
+                    print(f" - Metadatos en: {ruta_metadatos}")
+                    print(f" - Imagen en: {ruta_imagen}")
+                else:
+                    print(f"[INFO] El archivo DICOM {ruta_dicom} no contiene datos de imagen.")
+                    continue  # Continúa con el siguiente archivo
+                
+            except Exception as e:
+                print(f"[ERROR] Error al procesar el archivo DICOM {ruta_dicom}: {e}")
+                continue  # Continúa con el siguiente archivo en caso de error
 
     def extraer_caracteristicas(self):
         """

@@ -28,40 +28,45 @@ def extraer_imagen_jpg(archivo_dicom, carpeta_salida, indice):
     Extrae la imagen de un objeto DICOM y la guarda como archivo JPG en la carpeta indicada.
     Retorna la ruta del archivo JPG guardado.
     """
-    if hasattr(archivo_dicom, "pixel_array"):
-        pixel_array = archivo_dicom.pixel_array
+    try:
 
-        # Comprobar el rango de los píxeles antes de la normalización (opcional para debug)
-        print(f"Imagen {indice}: Valor mínimo de píxel:", np.min(pixel_array))
-        print(f"Imagen {indice}: Valor máximo de píxel:", np.max(pixel_array))
+        if hasattr(archivo_dicom, "pixel_array"):
+            pixel_array = archivo_dicom.pixel_array
 
-        # Obtener valores de ventana si existen
-        window_center = archivo_dicom.get('WindowCenter', None)
-        window_width = archivo_dicom.get('WindowWidth', None)
+            # Comprobar el rango de los píxeles antes de la normalización (opcional para debug)
+            print(f"Imagen {indice}: Valor mínimo de píxel:", np.min(pixel_array))
+            print(f"Imagen {indice}: Valor máximo de píxel:", np.max(pixel_array))
 
-        if window_center is not None and window_width is not None:
-            window_center = float(window_center)
-            window_width = float(window_width)
-            lower_bound = window_center - window_width // 2
-            upper_bound = window_center + window_width // 2
-            pixel_array = np.clip(pixel_array, lower_bound, upper_bound)
+            # Obtener valores de ventana si existen
+            window_center = archivo_dicom.get('WindowCenter', None)
+            window_width = archivo_dicom.get('WindowWidth', None)
 
-            # Normalizar a 0-255
-            pixel_array = pixel_array - np.min(pixel_array)
-            pixel_array = pixel_array / np.max(pixel_array)
-            pixel_array = (pixel_array * 255).astype(np.uint8)
+            if window_center is not None and window_width is not None:
+                window_center = float(window_center)
+                window_width = float(window_width)
+                lower_bound = window_center - window_width // 2
+                upper_bound = window_center + window_width // 2
+                pixel_array = np.clip(pixel_array, lower_bound, upper_bound)
+
+                # Normalizar a 0-255
+                pixel_array = pixel_array - np.min(pixel_array)
+                pixel_array = pixel_array / np.max(pixel_array)
+                pixel_array = (pixel_array * 255).astype(np.uint8)
+            else:
+                # Si no hay ventana, asegúrate que la imagen quede en el rango 0-255
+                pixel_array = pixel_array - np.min(pixel_array)
+                pixel_array = pixel_array / np.max(pixel_array)
+                pixel_array = (pixel_array * 255).astype(np.uint8)
+
+            imagen = Image.fromarray(pixel_array).convert('L')
+            os.makedirs(carpeta_salida, exist_ok=True)
+            ruta_imagen = os.path.join(carpeta_salida, f"imagen_{indice}.jpg")
+            imagen.save(ruta_imagen)
+            print(f"Imagen guardada en: {ruta_imagen}")
+            return ruta_imagen
         else:
-            # Si no hay ventana, asegúrate que la imagen quede en el rango 0-255
-            pixel_array = pixel_array - np.min(pixel_array)
-            pixel_array = pixel_array / np.max(pixel_array)
-            pixel_array = (pixel_array * 255).astype(np.uint8)
-
-        imagen = Image.fromarray(pixel_array).convert('L')
-        os.makedirs(carpeta_salida, exist_ok=True)
-        ruta_imagen = os.path.join(carpeta_salida, f"imagen_{indice}.jpg")
-        imagen.save(ruta_imagen)
-        print(f"Imagen guardada en: {ruta_imagen}")
-        return ruta_imagen
-    else:
-        print(f"El archivo DICOM {indice} no contiene datos de imagen.")
+            print(f"El archivo DICOM {indice} no contiene datos de imagen.")
+            return None
+    except Exception as e:
+        print(f"Error al extraer imagen del DICOM {indice}: {e}")
         return None

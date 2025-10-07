@@ -165,13 +165,13 @@ researcher_p = cli.subparsers.add_parser(
 
 # Integracion con el modulo DICOM
 def process_dicom(args):
-    from fedbiomed.modulo_dicom import pipeline_completo
+    from fedbiomed.modulo_dicom import ejecutar_pipeline
     """
     Función que procesa los archivos DICOM ubicados en el directorio indicado por el argumento '--path'.
     Se asume que existe un módulo 'mi_modulo_dicom' con la función 'process_dicom_directory'.
     """
     try:
-        pipeline_completo.main(args.ruta_dcm, args.num_dcm, args.nom_nodo)
+        ejecutar_pipeline.main(args.ruta_dcm, args.num_dcm, args.nom_nodo, args.clase_dg, args.metodo_bal)
     except ImportError:
         print("No se pudo encontrar el módulo de procesamiento DICOM")
         return
@@ -181,9 +181,34 @@ dicom_p = cli.subparsers.add_parser(
 dicom_p.add_argument("--ruta_dcm",type=str,required=True, help="Ruta del dataset")
 dicom_p.add_argument("--num_dcm",type=int,required=True,help="Número de archivos dicom")
 dicom_p.add_argument("--nom_nodo",type=str,required=True,help="Ruta del nodo para la salida de los arhivos procesados")
+dicom_p.add_argument("--clase_dg",type=int,required=True,choices=[1,0],help="Clase de diagnóstico: 0 (no cáncer), 1 (cáncer)")
+dicom_p.add_argument("--metodo_bal",type=str,default="smote",choices=["smote", "smote-enn", "random-under"],help="Estrategia de balanceo (opcional).")
 dicom_p.set_defaults(func=process_dicom)
 # fin integracioncuad
 
+# integracion balanceo
+def process_dicom(args):
+    from fedbiomed.preprocesador import preprocesamiento
+
+    prep = preprocesamiento.PipelinePreprocesamiento()
+    """
+    Función que procesa los archivos DICOM ubicados en el directorio indicado por el argumento '--path'.
+    Se asume que existe un módulo 'mi_modulo_dicom' con la función 'process_dicom_directory'.
+    """
+    try:
+        prep.balanceo(args.ruta_csv, args.metodo_bal, args.objetivo)
+    except ImportError:
+        print("No se pudo encontrar el módulo de preprocesamiento")
+        return
+dicom_p = cli.subparsers.add_parser(
+    "balance", help="Procesa archivos DICOM y genera CSV a partir de ellos."
+)
+dicom_p.add_argument("--ruta_csv",type=str,required=True, help="Ruta del dataset")
+dicom_p.add_argument("--metodo_bal",type=str,required=True,choices=["smote", "smote-enn", "random-under"],help="Estrategia de balanceo.")
+dicom_p.add_argument("--objetivo",type=str,default="Diagnostic",help="Clase objetivo para el balanceo (opcional). por defecto 'Diagnostic'")
+
+dicom_p.set_defaults(func=process_dicom)
+# fin integracion balanceo
 def node(args):
     """Forwards node CLI"""
     NodeCLI = importlib.import_module("fedbiomed.node.cli").NodeCLI
