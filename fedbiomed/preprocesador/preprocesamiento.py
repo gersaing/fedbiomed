@@ -111,7 +111,8 @@ class PipelinePreprocesamiento:
         print("[INFO] Columnas irrelevantes eliminadas.")
         return df
     @staticmethod
-    def codificar_dataset(df):
+    def codificar_dataset_(df):
+       
         """Realiza codificaciones específicas en el DataFrame."""
         mapeo_burned_in = {'NO': 0, 'YES': 1}
 
@@ -136,6 +137,37 @@ class PipelinePreprocesamiento:
         # One-hot encoding
 
         return df
+    @staticmethod
+    def codificar_dataset(df):
+        """Codificación temporal compatible con modelo entrenado con valores numéricos directos."""
+        print("[INFO] Codificando dataset...")
+        df.to_csv("prueba.csv", index=False)
+        # Codificación binaria para BurnedInAnnotation
+        mapeo_burned_in = {'NO': 0.0, 'YES': 1.0}
+        if 'BurnedInAnnotation' in df.columns:
+            df['BurnedInAnnotation'] = df['BurnedInAnnotation'].map(mapeo_burned_in)
+
+        # Extracción numérica de edad
+        if 'PatientAge' in df.columns:
+            df['PatientAge'] = df['PatientAge'].astype(str).str.extract(r'(\d+)').astype(float)
+
+        # Codificación directa para ViewPosition
+        mapeo_view_position = {'CC': 0.0, 'MLO': 1.0}
+
+        if 'ViewPosition' in df.columns:
+            df['ViewPosition'] = df['ViewPosition'].map(mapeo_view_position)
+
+        # Codificación directa para ImageLaterality
+        mapeo_laterality = {'L': 0.0, 'R': 1.0}
+        if 'ImageLaterality' in df.columns:
+            df['ImageLaterality'] = df['ImageLaterality'].map(mapeo_laterality)
+
+        # Limpieza de orientación (sin codificación)
+        if 'PatientOrientation' in df.columns:
+            df['PatientOrientation'] = df['PatientOrientation'].astype(str).str.replace(r"[\[\]',]", '', regex=True).str.strip()
+
+        return df
+
     @staticmethod
     def normalizar_entrenamiento(df, ruta_escalador):
         """
@@ -189,11 +221,11 @@ class PipelinePreprocesamiento:
         """
         df_entrenamiento = pd.read_csv(csv_entrenamiento)
         columnas_entrenamiento = df_entrenamiento.columns.tolist()
-
         for col in columnas_entrenamiento:
             if col not in df_validacion.columns:
                 df_validacion[col] = 0
 
         df_validacion = df_validacion[columnas_entrenamiento]
         df_validacion = df_validacion.drop(columns=['Diagnostic'], errors='ignore')
+        print("[INFO] Dataset de validación ajustado a las columnas del entrenamiento.")
         return df_validacion

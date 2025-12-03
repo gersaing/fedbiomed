@@ -209,6 +209,28 @@ dicom_p.add_argument("--objetivo",type=str,default="Diagnostic",help="Clase obje
 
 dicom_p.set_defaults(func=process_dicom)
 # fin integracion balanceo
+
+# integracion vista-clsasificador
+def process_dicom(args):
+    from fedbiomed.modulo_dicom.vista import iniciar_interfaz
+
+    iniciar_interfaz()
+    """
+    Función que procesa los archivos DICOM ubicados en el directorio indicado por el argumento '--path'.
+    Se asume que existe un módulo 'mi_modulo_dicom' con la función 'process_dicom_directory'.
+    """
+    try:
+        print("Iniciando interfaz gráfica para procesamiento DICOM...")
+    except ImportError:
+        print("No se pudo iniciar la interfaz gráfica")
+        return
+dicom_p = cli.subparsers.add_parser(
+    "clasificador", help="Inicia la interfaz gráfica para procesamiento DICOM."
+)
+
+dicom_p.set_defaults(func=process_dicom)
+# fin integracion vista-clasificador
+
 def node(args):
     """Forwards node CLI"""
     NodeCLI = importlib.import_module("fedbiomed.node.cli").NodeCLI

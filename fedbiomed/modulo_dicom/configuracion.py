@@ -10,6 +10,8 @@ ARCHIVO_CARACTERISTICAS = "caracteristicas.csv"
 ARCHIVO_BALANCEADO_SMOTE = "dataset_cancer_mama_smote.csv"
 ARCHIVO_BALANCEADO_UNDER = "dataset_cancer_mama_under.csv"
 ARCHIVO_BALANCEADO_SMOTE_ENN = "dataset_cancer_mama_smtn.csv"
+RUTA_CLASIFICACION = "fedbiomed/fedbiomed/modulo_dicom/vista"
+RUTA_IMAGEN_FED = "fedbiomed/fedbiomed/modulo_dicom/vista/fed-BioMed-I.png"
 
 def obtener_rutas(ruta_nodo):
     carpeta_base = ruta_nodo
@@ -25,6 +27,7 @@ def obtener_rutas(ruta_nodo):
         "validacion": os.path.join(carpeta_base, ARCHIVO_VALIDACION),
         "bal_smote": os.path.join(carpeta_base, ARCHIVO_BALANCEADO_SMOTE),
         "bal_under": os.path.join(carpeta_base, ARCHIVO_BALANCEADO_UNDER),
-        "bal_smote_enn": os.path.join(carpeta_base, ARCHIVO_BALANCEADO_SMOTE_ENN)
+        "bal_smote_enn": os.path.join(carpeta_base, ARCHIVO_BALANCEADO_SMOTE_ENN),
+        "imagen_fed" : os.path.join(RUTA_IMAGEN_FED)
     }
     return rutas

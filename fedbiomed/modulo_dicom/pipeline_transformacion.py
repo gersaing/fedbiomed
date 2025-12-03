@@ -18,13 +18,14 @@ class PipelineDicom:
             os.makedirs(carpeta, exist_ok=True)
     
     def procesar_directorio(self):
-
+        print("[INFO] Procesando directorio DICOM...")
         rutas_dicoms = obtener_lista_dicoms(self.ruta_directorio)
         ruta_csv_caracteriticas = self.rutas['caracteristicas']
         if os.path.exists(ruta_csv_caracteriticas):
             os.remove(ruta_csv_caracteriticas)
 
         for indice, ruta_dicom in enumerate(rutas_dicoms[:self.limite]):
+            print("INFO iterando archivo:")
             try:
                 dicom = cargar_dicom(ruta_dicom)
                 ruta_imagen = extraer_imagen_jpg(dicom, self.carpeta_imagenes, indice + 1)
@@ -46,6 +47,7 @@ class PipelineDicom:
         """
         Extrae las características de una imagen DICOM y las guarda en un CSV.
         """
+        print("[INFO] Extrayendo características de las imágenes...")
         extractor = ExtractorCaracteristicas(dispositivo="cpu",modo_transform="compat")
         for ruta in iter_rutas_imagenes(self.carpeta_imagenes):
             vector = extractor.extraer(ruta)

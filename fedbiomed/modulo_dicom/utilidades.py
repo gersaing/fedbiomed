@@ -9,6 +9,11 @@ def obtener_lista_dicoms(ruta_directorio):
     encontrados recursivamente en el directorio dado.
     """
     archivos_dicom = []
+    if os.path.isfile(ruta_directorio):
+        if ruta_directorio.endswith(('.dcm', '.dicom')):
+            archivos_dicom.append(os.path.abspath(ruta_directorio))
+        return archivos_dicom
+    
     for subdirectorio, _, archivos in os.walk(ruta_directorio):
         for archivo in archivos:
             if archivo.endswith(".dcm") or archivo.endswith(".dicom"):
